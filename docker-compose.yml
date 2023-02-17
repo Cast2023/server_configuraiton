@@ -1,0 +1,26 @@
+version: '3'
+services:
+  registry:
+    image: registry:2
+    networks:
+      - deployment
+    volumes:
+      - /images:/var/lib/registry
+
+  proxy:
+    image: nginx:alpine
+    volumes:
+      - $PWD/nginx.conf:/etc/nginx/nginx.conf
+      - $PWD/certs:/etc/nginx/certs/
+      - $PWD/auth:/etc/nginx/conf.d
+    ports:
+      - 443:443
+    networks:
+      - deployment
+    environment:
+      - PRODUCTION_SERVER_NAME=${PRODUCTION_SERVER_NAME}
+      - STAGING_SERVER_NAME=${STAGING_SERVER_NAME}
+
+networks:
+  deployment:
+    name: deployment

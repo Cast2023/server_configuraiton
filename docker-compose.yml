@@ -3,7 +3,7 @@ services:
   registry:
     image: registry:2
     networks:
-      - deployment
+      - default
     volumes:
       - /images:/var/lib/registry # store for container images
 
@@ -16,11 +16,15 @@ services:
     ports:
       - 443:443
     networks:
-      - deployment
+      - default
+      - production
+      - staging
     environment:
       - PRODUCTION_SERVER_NAME=${PRODUCTION_SERVER_NAME}
       - STAGING_SERVER_NAME=${STAGING_SERVER_NAME}
 
 networks:
-  deployment:
-    name: deployment
+  production:
+    name: production
+  staging:
+    name: staging
